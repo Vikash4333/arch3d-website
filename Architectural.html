@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arch3D: Innovative Architectural Designs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest/dist/lucide.min.js"></script>
+    <style>
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; margin: 0; overflow-x: hidden; background-color: #f3f4f6; color: #1f2937; position: relative; }
+        body.dark { background-color: #111827; color: #d1d5db; }
+
+        @keyframes fade-in-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in-up { animation: fade-in-up 0.8s ease-out forwards; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-400 { animation-delay: 0.4s; }
+        .delay-600 { animation-delay: 0.6s; }
+
+        .message-box { position: fixed; top: 1rem; left: 50%; transform: translateX(-50%); padding: 1rem; border-radius: 0.5rem; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); z-index: 1000; color: white; transition: opacity 0.3s; min-width: 250px; }
+        .message-box.hidden { opacity: 0; pointer-events: none; }
+
+        /* Stylish Dropdown Menu */
+        #main-menu-dropdown {
+            display: none;
+            position: absolute;
+            top: 60px;
+            right: 0;
+            width: 220px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            overflow: hidden;
+            z-index: 100;
+        }
+        .dark #main-menu-dropdown {
+            background: rgba(31, 41, 55, 0.95);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+        #main-menu-dropdown a {
+            display: block;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+            color: inherit;
+        }
+        #main-menu-dropdown a:hover {
+            background: #4f46e5;
+            color: white;
+        }
+
+        #threejs-container canvas { display: block; width: 100%; height: 100%; }
+        .control-group { background-color: rgba(0, 0, 0, 0.5); border-radius: 12px; padding: 10px; backdrop-filter: blur(5px); border: 1px solid rgba(255, 255, 255, 0.1); }
+    </style>
+</head>
+<body class="dark">
+    <div id="message-box" class="message-box hidden">
+        <span id="message-box-text"></span>
+        <button id="message-box-close" class="ml-4 p-1 rounded-full hover:bg-white hover:bg-opacity-20"><i data-lucide="x" class="h-4 w-4"></i></button>
+    </div>
+
+    <nav class="fixed top-0 left-0 w-full bg-white dark:bg-gray-800 shadow-md z-50 transition-colors duration-300">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center relative">
+            <a href="#home" class="flex items-center text-xl font-bold text-indigo-600 dark:text-blue-400">
+                <i data-lucide="cube" class="mr-2 h-7 w-7"></i> Arch3D
+            </a>
+
+            <div class="flex items-center space-x-4">
+                <button id="dark-mode-toggle" class="p-2 rounded-full bg-gray-100 dark:bg-gray-700">
+                    <i data-lucide="sun" id="sun-icon"></i>
+                    <i data-lucide="moon" id="moon-icon" class="hidden"></i>
+                </button>
+
+                <div class="relative">
+                    <button id="menu-trigger" class="flex items-center space-x-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-5 py-2 rounded-full font-bold shadow-lg hover:scale-105 transition-all">
+                        <i data-lucide="menu" class="h-5 w-5"></i>
+                        <span>Menu</span>
+                    </button>
+
+                    <div id="main-menu-dropdown">
+                        <a href="#home">Home</a>
+                        <a href="#projects">Projects</a>
+                        <a href="#about">About Us</a>
+                        <a href="#services">Services</a>
+                        <a href="#testimonials">Testimonials</a>
+                        <a href="#blog">Blog</a>
+                        <a href="#contact">Contact</a>
+                        <a href="#pricing">Pricing</a>
+                        <a href="#client-login" class="text-indigo-500 font-bold border-t border-gray-200 dark:border-gray-700">Client Login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-16">
+        <section id="home" class="relative w-full h-screen overflow-hidden flex items-center justify-center bg-gray-900">
+            <div id="threejs-container" class="absolute inset-0 w-full h-full z-0"></div>
+            
+            <div class="relative z-10 text-center p-6 md:p-10 bg-black bg-opacity-40 rounded-2xl border border-gray-700 animate-fade-in-up">
+                <h1 class="text-5xl md:text-7xl font-extrabold text-white leading-tight mb-4 drop-shadow-lg">
+                    <span class="text-blue-400">Vikash Pandey</span> Designs
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto">
+                    Crafting immersive 3D experiences that redefine space and vision for the future.
+                </p>
+                <a href="#projects" class="inline-block bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold py-4 px-10 rounded-full text-lg shadow-xl hover:scale-105 transition-transform">
+                    Explore Our Projects
+                </a>
+            </div>
+
+            <div class="absolute bottom-20 left-1/2 -translate-x-1/2 z-20 flex space-x-3 control-group animate-fade-in-up delay-600">
+                <button id="reset-view-button" class="p-3 rounded-full bg-indigo-600 text-white" title="Reset View"><i data-lucide="rotate-ccw"></i></button>
+                <button id="day-night-toggle" class="p-3 rounded-full bg-yellow-500 text-white" title="Toggle Light"><i data-lucide="sun-moon"></i></button>
+                <button id="walkthrough-mode-toggle" class="p-3 rounded-full bg-blue-600 text-white" title="Walkthrough"><i data-lucide="user"></i></button>
+            </div>
+
+            <div class="absolute top-20 right-4 z-20 flex flex-col space-y-3 control-group animate-fade-in-up">
+                <div class="flex flex-col items-center">
+                    <span class="text-xs text-white mb-2 font-bold uppercase text-center">Material</span>
+                    <button class="material-change-button p-2 rounded bg-yellow-700 text-white text-xs mb-1 w-16" data-material="wood">Wood</button>
+                    <button class="material-change-button p-2 rounded bg-sky-500 text-white text-xs mb-1 w-16" data-material="glass">Glass</button>
+                    <button class="material-change-button p-2 rounded bg-zinc-400 text-white text-xs w-16" data-material="default">Default</button>
+                </div>
+                <div class="flex flex-col items-center pt-2">
+                    <span class="text-xs text-white mb-2 font-bold uppercase text-center">Floor</span>
+                    <button id="floor-up-button" class="p-2 rounded bg-green-500 text-white text-xs mb-1 w-16 font-bold">UP</button>
+                    <button id="floor-down-button" class="p-2 rounded bg-red-500 text-white text-xs w-16 font-bold">DOWN</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="py-20 px-4 bg-gray-50 dark:bg-gray-800 transition-colors duration-300">
+            <div class="container mx-auto text-center">
+                <h2 class="text-4xl font-bold mb-8">Our Portfolio</h2>
+                <div class="flex justify-center flex-wrap gap-4 mb-10">
+                    <button onclick="renderProjects('All')" class="px-6 py-2 rounded-full bg-indigo-600 text-white shadow-md">All</button>
+                    <button onclick="renderProjects('Residential')" class="px-6 py-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-indigo-600 hover:text-white transition">Residential</button>
+                    <button onclick="renderProjects('Commercial')" class="px-6 py-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-indigo-600 hover:text-white transition">Commercial</button>
+                    <button onclick="renderProjects('Interiors')" class="px-6 py-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-indigo-600 hover:text-white transition">Interiors</button>
+                </div>
+                <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+                <button onclick="renderProjects('All')" class="mt-16 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg shadow-md">View All Projects</button>
+            </div>
+        </section>
+
+        <section id="about" class="py-20 px-4 transition-colors duration-300">
+            <div class="container mx-auto text-center">
+                <h2 class="text-4xl font-bold mb-8">About Arch3D</h2>
+                <div class="max-w-4xl mx-auto bg-white dark:bg-gray-800 p-8 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700">
+                    <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
+                        Arch3D is a pioneering architectural firm led by Vikash Pandey, dedicated to transforming visions into reality through cutting-edge 3D visualization.
+                    </p>
+                    <h3 class="text-2xl font-semibold mb-6 text-indigo-600">Our Team</h3>
+                    <div class="flex justify-center">
+                        <div class="flex flex-col items-center">
+                            <img src="https://placehold.co/150x150/a855f7/ffffff?text=Vikash+Pandey" class="rounded-full w-32 h-32 object-cover mb-4 shadow-lg" />
+                            <h4 class="text-xl font-semibold">Vikash Pandey</h4>
+                            <p class="text-indigo-500 font-bold uppercase">Principal Architect</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="services" class="py-20 px-4 bg-gray-50 dark:bg-gray-800 transition-colors duration-300">
+            <div class="container mx-auto text-center">
+                <h2 class="text-4xl font-bold mb-8">Our Expert Services</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-white dark:bg-gray-900 p-8 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700">
+                         <i data-lucide="building" class="mx-auto mb-4 h-10 w-10 text-indigo-600"></i>
+                        <h3 class="text-2xl font-bold text-indigo-600">Architecture Design</h3>
+                        <p class="mt-2 text-gray-600 dark:text-gray-400">Functional and aesthetically pleasing structural blueprints.</p>
+                    </div>
+                    <div class="bg-white dark:bg-gray-900 p-8 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700">
+                        <i data-lucide="layout" class="mx-auto mb-4 h-10 w-10 text-indigo-600"></i>
+                        <h3 class="text-2xl font-bold text-indigo-600">Interior Design</h3>
+                        <p class="mt-2 text-gray-600 dark:text-gray-400">Personalized and elegant living environments.</p>
+                    </div>
+                    <div class="bg-white dark:bg-gray-900 p-8 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700">
+                        <i data-lucide="box" class="mx-auto mb-4 h-10 w-10 text-indigo-600"></i>
+                        <h3 class="text-2xl font-bold text-indigo-600">3D Visualization</h3>
+                        <p class="mt-2 text-gray-600 dark:text-gray-400">High-fidelity photorealistic renderings and models.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="testimonials" class="py-20 px-4 transition-colors duration-300">
+            <div class="container mx-auto text-center">
+                <h2 class="text-4xl font-bold mb-12">What Our Clients Say</h2>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto italic">
+                    <div class="p-8 bg-white dark:bg-gray-900 rounded-lg shadow-xl border text-left">
+                        "Arch3D transformed our office space beyond imagination."
+                        <p class="mt-4 font-bold text-indigo-600">- Rohan Sharma, CEO</p>
+                    </div>
+                    <div class="p-8 bg-white dark:bg-gray-900 rounded-lg shadow-xl border text-left">
+                        "The attention to detail was truly exceptional."
+                        <p class="mt-4 font-bold text-indigo-600">- Priya Singh</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="blog" class="py-20 px-4 bg-white dark:bg-gray-900 transition-colors duration-300">
+            <div class="container mx-auto text-center">
+                <h2 class="text-4xl font-bold mb-12">Our Architecture Blog</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-left">
+                    <div class="p-6 bg-gray-50 dark:bg-gray-800 rounded-xl shadow border border-gray-200 dark:border-gray-700">
+                        <h3 class="text-xl font-bold text-indigo-600 mb-2">Project Description</h3>
+                        <p class="text-gray-600 dark:text-gray-400">Modern architecture principles focusing on functionality and aesthetic tailored to client needs.</p>
+                    </div>
+                    <div class="p-6 bg-gray-50 dark:bg-gray-800 rounded-xl shadow border border-gray-200 dark:border-gray-700">
+                        <h3 class="text-xl font-bold text-indigo-600 mb-2">Modern Design Ideas</h3>
+                        <p class="text-gray-600 dark:text-gray-400">Clean lines, open spaces, and natural lighting are the key to a modern home.</p>
+                    </div>
+                    <div class="p-6 bg-gray-50 dark:bg-gray-800 rounded-xl shadow border border-gray-200 dark:border-gray-700">
+                        <h3 class="text-xl font-bold text-indigo-600 mb-2">3D Architecture Concepts</h3>
+                        <p class="text-gray-600 dark:text-gray-400">Final construction clarity provided via advanced 3D elevation and visualization.</p>
+                    </div>
+                    <div class="p-6 bg-gray-50 dark:bg-gray-800 rounded-xl shadow border border-gray-200 dark:border-gray-700">
+                        <h3 class="text-xl font-bold text-indigo-600 mb-2">Architecture Tips</h3>
+                        <p class="text-gray-600 dark:text-gray-400">Proper ventilation and space planning are vital for building longevity.</p>
+                    </div>
+                    <div class="p-6 bg-gray-50 dark:bg-gray-800 rounded-xl shadow border border-gray-200 dark:border-gray-700">
+                        <h3 class="text-xl font-bold text-indigo-600 mb-2">Materials & Finishes</h3>
+                        <p class="text-gray-600 dark:text-gray-400">Using cement, glass, and wood combinations for strong and attractive builds.</p>
+                    </div>
+                    <div class="p-6 bg-gray-50 dark:bg-gray-800 rounded-xl shadow border border-gray-200 dark:border-gray-700">
+                        <h3 class="text-xl font-bold text-indigo-600 mb-2">Latest Trends</h3>
+                        <p class="text-gray-600 dark:text-gray-400">Sustainable design and smart-home technology integrations are today's standard.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="py-20 px-4 bg-gray-50 dark:bg-gray-800 transition-colors duration-300">
+            <div class="container mx-auto max-w-6xl text-center">
+                <h2 class="text-4xl font-bold mb-12">Contact Vikash Pandey</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 text-left">
+                    <div class="bg-white dark:bg-gray-900 p-8 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700">
+                        <p class="mb-2"><strong>Phone:</strong> +91 97927 10058</p>
+                        <p class="mb-2"><strong>Email:</strong> vp514899@gmail.com</p>
+                        <p class="mb-6"><strong>Address:</strong> Sonipat, Haryana, India</p>
+                        <div class="w-full h-48 bg-gray-200 rounded-lg overflow-hidden border">
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d111663.79177699742!2d76.9535359!3d28.9930811!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390db00b2169622d%3A0x6b107080f5a7703!2sSonipat%2C%20Haryana!5e0!3m2!1sen!2sin!4v17000000000004" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                        </div>
+                        <a href="https://wa.me/919792710058" target="_blank" class="mt-6 inline-block bg-green-500 text-white px-6 py-2 rounded-full font-bold">WhatsApp Me</a>
+                    </div>
+                    <div class="bg-white dark:bg-gray-900 p-8 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700">
+                        <form class="space-y-6">
+                            <input type="text" placeholder="Name" class="w-full p-3 border dark:bg-gray-800 dark:border-gray-700 rounded" />
+                            <textarea placeholder="Message" rows="5" class="w-full p-3 border dark:bg-gray-800 dark:border-gray-700 rounded"></textarea>
+                            <button class="w-full bg-indigo-600 text-white py-3 rounded-md font-bold">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="pricing" class="py-20 px-4 bg-white dark:bg-gray-900 text-center font-bold">
+            <h2 class="text-4xl font-bold mb-12">Pricing & Packages</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <div class="p-8 bg-gray-50 dark:bg-gray-800 rounded shadow">Basic Plan<p class="text-indigo-600 text-2xl">₹50,000</p></div>
+                <div class="p-8 bg-indigo-600 text-white rounded shadow scale-105">Premium Plan<p class="text-2xl">₹2,00,000</p></div>
+                <div class="p-8 bg-gray-50 dark:bg-gray-800 rounded shadow">Luxury Plan<p class="text-indigo-600 text-2xl">Quote</p></div>
+            </div>
+        </section>
+
+        <section id="client-login" class="py-20 px-4 bg-gray-50 dark:bg-gray-800 text-center">
+            <div class="max-w-md mx-auto bg-white dark:bg-gray-900 p-8 rounded shadow-xl border border-gray-200 dark:border-gray-700">
+                <h2 class="text-4xl font-bold mb-8">Client Login</h2>
+                <form class="space-y-4"><input type="email" placeholder="Email" class="w-full p-3 border dark:bg-gray-700 rounded" /><input type="password" placeholder="Password" class="w-full p-3 border dark:bg-gray-700 rounded" /><button class="w-full bg-indigo-600 text-white py-3 rounded font-bold">Login</button></form>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-gray-400 py-10 text-center border-t border-gray-700">
+        <p>© 2026 Vikash Pandey | Arch3D. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/controls/OrbitControls.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/18.6.4/tween.min.js"></script>
+
+    <script>
+        // MENU DROPDOWN LOGIC
+        const menuTrigger = document.getElementById('menu-trigger');
+        const menuDropdown = document.getElementById('main-menu-dropdown');
+        menuTrigger.onclick = (e) => { e.stopPropagation(); menuDropdown.style.display = menuDropdown.style.display === 'block' ? 'none' : 'block'; };
+        window.onclick = () => { menuDropdown.style.display = 'none'; };
+
+        // --- Multi-Part 3D Logic ---
+        let scene, camera, renderer, controls, buildingGroup, floor1, floor2, roof;
+        let originalColor = 0x4CAF50;
+
+        function init3D() {
+            const container = document.getElementById('threejs-container');
+            scene = new THREE.Scene(); scene.background = new THREE.Color(0xADD8E6);
+            camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+            camera.position.set(6, 4, 8);
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            container.appendChild(renderer.domElement);
+            scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+            const sun = new THREE.DirectionalLight(0xffffff, 1); sun.position.set(5, 10, 5); scene.add(sun);
+            
+            buildingGroup = new THREE.Group(); buildingGroup.position.y = 1;
+            floor1 = new THREE.Mesh(new THREE.BoxGeometry(4, 2, 3), new THREE.MeshPhongMaterial({ color: originalColor }));
+            floor2 = new THREE.Mesh(new THREE.BoxGeometry(4, 2, 3), new THREE.MeshPhongMaterial({ color: 0x2196F3 })); floor2.position.set(0, 2, 0);
+            roof = new THREE.Mesh(new THREE.BoxGeometry(4.5, 0.5, 3.5), new THREE.MeshPhongMaterial({ color: 0xF44336 })); roof.position.set(0, 3.25, 0);
+            buildingGroup.add(floor1, floor2, roof); scene.add(buildingGroup);
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            function animate() { requestAnimationFrame(animate); if(controls) controls.update(); renderer.render(scene, camera); TWEEN.update(); }
+            animate();
+        }
+
+        // --- Portfolio Filter Logic ---
+        const projects = [
+            { title: "Eco Villa", category: "Residential", imageUrl: "https://placehold.co/600x400/10b981/ffffff?text=Residential" },
+            { title: "City Office", category: "Commercial", imageUrl: "https://placehold.co/600x400/3b82f6/ffffff?text=Commercial" },
+            { title: "Modern Studio", category: "Interiors", imageUrl: "https://placehold.co/600x400/ef4444/ffffff?text=Interiors" }
+        ];
+
+        function renderProjects(filter = 'All') {
+            const grid = document.getElementById('projects-grid');
+            const filtered = filter === 'All' ? projects : projects.filter(p => p.category === filter);
+            grid.innerHTML = filtered.map(p => `<div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl overflow-hidden hover:scale-105 transition-transform text-left p-4"><img src="${p.imageUrl}" class="w-full rounded mb-4" /><h3 class="text-xl font-bold">${p.title}</h3><p class="text-indigo-600 text-sm font-bold uppercase">${p.category}</p></div>`).join('');
+        }
+
+        // Buttons
+        document.querySelectorAll('.material-change-button').forEach(btn => {
+            btn.onclick = (e) => {
+                const mat = e.currentTarget.dataset.material;
+                let col = originalColor;
+                if(mat === 'wood') col = 0x8B4513;
+                if(mat === 'glass') col = 0xcceeff;
+                buildingGroup.children.forEach(m => { m.material.color.set(col); m.material.opacity = (mat === 'glass' ? 0.5 : 1); m.material.transparent = (mat === 'glass'); });
+            };
+        });
+        document.getElementById('floor-up-button').onclick = () => new TWEEN.Tween(controls.target).to({y: 3}, 500).start();
+        document.getElementById('floor-down-button').onclick = () => new TWEEN.Tween(controls.target).to({y: 1}, 500).start();
+        document.getElementById('day-night-toggle').onclick = () => { const isNight = scene.background.getHex() === 0xADD8E6; scene.background = new THREE.Color(isNight ? 0x000033 : 0xADD8E6); };
+        document.getElementById('reset-view-button').onclick = () => { camera.position.set(6, 4, 8); controls.target.set(0,0,0); };
+
+        window.onload = () => { init3D(); renderProjects('All'); lucide.createIcons(); document.getElementById('current-year').textContent = new Date().getFullYear(); };
+        document.getElementById('dark-mode-toggle').onclick = () => { document.body.classList.toggle('dark'); lucide.createIcons(); };
+    </script>
+</body>
+</html>
