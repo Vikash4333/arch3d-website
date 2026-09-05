@@ -23,4 +23,4 @@ An interactive, modern 3D architectural visualization website designed to showca
 ## 🚀 How to Run Locally
 1. Clone the repository:
    ```bash
-   git clone [https://github.com/Vikash4333/arch3d-website.git](https://github.com/Vikash4333/arch3d-website.git)
+  git clone https://github.com/Vikash4333/arch3d-website.git
